@@ -1,8 +1,8 @@
 {
     "name": "csy.db",
-    "version": "0.0.4",
+    "version": "0.0.5",
     "description": "Readable Local Json Database Structure",
-    "main": "src/main.js",
+    "main": "index.js",
     "scripts": {
         "test": "node test.js"
     },
