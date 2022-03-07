@@ -1,6 +1,6 @@
 <p align="center"><a href="https://nodei.co/npm/csy.db"><img src="https://nodei.co/npm/csy.db.png"></a></p>
 
-<p align="center"><img src="https://img.shields.io/npm/v/csy.db?style=for-the-badge"> <img src="https://img.shields.io/github/repo-size/CsYBot/csy.db?style=for-the-badge"> <img src="https://img.shields.io/npm/l/csy.db?style=for-the-badge"> <img src="https://img.shields.io/npm/dt/csy.db?style=for-the-badge"> <img src="https://img.shields.io/github/contributors/CsYBot/csy.db?style=for-the-badge"> <img src="https://img.shields.io/github/package-json/dependency-version/CsYBot/csy.db/axios?style=for-the-badge"> <a href="https://discord.gg/gkmwaAZQBu" target="_blank"> <img alt="Discord" src="https://img.shields.io/badge/CsYBot%20Support-Click%20here-7289d9?style=for-the-badge&logo=discord"> </a></p>
+<p align="center"><img src="https://img.shields.io/npm/v/csy.db?style=for-the-badge"> <img src="https://img.shields.io/github/repo-size/CsYBot/csy.db?style=for-the-badge"> <img src="https://img.shields.io/npm/l/csy.db?style=for-the-badge"> <img src="https://img.shields.io/npm/dt/csy.db?style=for-the-badge"> <img src="https://img.shields.io/github/contributors/CsYBot/csy.db?style=for-the-badge"> <a href="https://discord.gg/gkmwaAZQBu" target="_blank"> <img alt="Discord" src="https://img.shields.io/badge/CsYBot%20Support-Click%20here-7289d9?style=for-the-badge&logo=discord"> </a></p>
 
 # csy.db
 
