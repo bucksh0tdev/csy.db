@@ -8,7 +8,7 @@
 ```js
 const db = require("csy.db");
 
-// Data Set | Get || Add
+// Data Set | Get | Add
 db.set("KEY", "DATA"); // Change Data And Result Data
 db.get("KEY"); // Result Data
 db.add("KEY"); // Change Data And Result Data
