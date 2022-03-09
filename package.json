@@ -1,10 +1,10 @@
 {
     "name": "csy.db",
-    "version": "0.0.6",
+    "version": "1.4.1",
     "description": "Readable Local Json Database Structure",
     "main": "index.js",
     "scripts": {
-        "test": "node test.js"
+        "start": "node test.js"
     },
     "keywords": [
         "json",
@@ -20,9 +20,9 @@
     "author": "bucksh0t",
     "license": "Apache-2.0",
     "bugs": {
-        "url": "https://github.com/CsYBot/csy.db/issues"
+        "url": "https://github.com/CsYBot/csy.db-npm/issues"
     },
-    "homepage": "https://github.com/CsYBot/csy.db/issues#readme",
+    "homepage": "https://github.com/CsYBot/csy.db-npm",
     "dependencies": {
         "fs": "^0.0.1-security",
         "fs-extra": "^10.0.1",
