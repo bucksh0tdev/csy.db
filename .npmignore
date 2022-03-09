@@ -6,3 +6,6 @@ node_modules
 .glitchdotcom.json 
 shrinkwrap.yaml
 .github
+datas.json
+csydb_config.json
+test.js
