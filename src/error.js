@@ -1,6 +1,9 @@
-module.exports = function(error) {
-    console.log(error)
-    let subfix = ". For help: https://discord.gg/gkmwaAZQBu";
-    throw new TypeError(String(error + subfix));
-    return false;
+let subfix = ". For help: https://discord.gg/gkmwaAZQBu";
+
+class ShowError extends Error {
+    constructor(message) {
+        super(`${message}${subfix}`);
+    }
 }
+
+module.exports = ShowError
