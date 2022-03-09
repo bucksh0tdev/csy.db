@@ -111,10 +111,9 @@ class create {
             }
             let jsonData = this.toJSON();
             if(!jsonData) return false;
-            delete jsonData[`${key}`];
-            fs.writeFile(this.path, JSON.stringify(jsonData, null, 4), null, function() {
-                return true;
-            })
+            unset(jsonData, key)
+            fs.writeFileSync(this.path, JSON.stringify(jsonData, null, 4))
+            return;
         }
     }
 }
