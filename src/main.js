@@ -8,29 +8,32 @@ const multiple = require("./multiple.js");
 
 class create {
     constructor() {
-        this.create = multiple
-      
-        this.configpath = paths.join(process.cwd(), "csydb_config.json");
-
-        if(!fs.existsSync(this.configpath)) {
-            fse.outputFileSync(this.configpath, `{ "path": "datas.json", "limit": 0 }`)
-        }
-        this.config = JSON.parse(fs.readFileSync(this.configpath, "utf-8"));
-
-        if(!this.config || !this.config.path || isNaN(this.config.limit)) throw new ErrorShow("Config File Problem");
-
-        const maxlimit = Number((isNaN(this.config.limit)) ? 0 : this.config.limit);
-
-        this.path = paths.join(process.cwd(), this.config.path);
-
         this.version = require("../package.json").version
+        this.create = multiple;
+      
+        var maxlimit;
+        this.setup = function() {
+            this.configpath = paths.join(process.cwd(), "csydb_config.json");
 
-        if(!String(this.path).endsWith(".json")) throw new ErrorShow("End With .json Data Json File");
-        if(!fs.existsSync(this.path)) {
-            fse.outputFileSync(this.path, "{}")
+            if(!fs.existsSync(this.configpath)) {
+                fse.outputFileSync(this.configpath, `{ "path": "datas.json", "limit": 0 }`)
+            }
+            this.config = JSON.parse(fs.readFileSync(this.configpath, "utf-8"));
+
+            if(!this.config || !this.config.path || isNaN(this.config.limit)) throw new ErrorShow("Config File Problem");
+
+            maxlimit = Number((isNaN(this.config.limit)) ? 0 : this.config.limit);
+
+            this.path = paths.join(process.cwd(), this.config.path);
+
+            if(!String(this.path).endsWith(".json")) throw new ErrorShow("End With .json Data Json File");
+            if(!fs.existsSync(this.path)) {
+                fse.outputFileSync(this.path, "{}")
+            }
         }
 
         this.toJSON = function(limit) {
+            this.setup();
             const allData = this.all(limit);
             const json = {};
             for (const element of allData) {
@@ -40,6 +43,7 @@ class create {
         }
 
         this.set = function(key, value) {
+            this.setup();
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
             if (value === "" || value === undefined || value === null) throw new ErrorShow("Unapproved value");
             if(maxlimit != 0 && this.size() >= maxlimit) throw new ErrorShow("Data limit exceeded");
@@ -50,6 +54,7 @@ class create {
         }
 
         this.add = function(key, value) {
+            this.setup();
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
             if (value === "" || value === undefined || value === null || isNaN(Number(value))) throw new ErrorShow("Unapproved value");
             let jsonData = this.toJSON();
@@ -63,6 +68,7 @@ class create {
         }
 
         this.get = function(key) {
+            this.setup();
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
             let jsonData = this.toJSON();
             if(!jsonData) return null;
@@ -73,11 +79,13 @@ class create {
         }
 
         this.fetch = function(key) {
+            this.setup();
             let control = this.get(key);
             return control;
         }
 
         this.has = function(key) {
+            this.setup();
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
             let all = this.toJSON();
             if(!all) return false;
@@ -88,6 +96,7 @@ class create {
         }
 
         this.all = function(limit = 0) {
+            this.setup();
             if (typeof limit !== "number") throw new ErrorShow("Must be of limit number type");
             const jsonData = JSON.parse(fs.readFileSync(this.path, "utf-8"));
             const arr = [];
@@ -101,6 +110,7 @@ class create {
         }
 
         this.size = function() {
+            this.setup();
             let all = this.toJSON();
             if(!all) return Number(0);
             let alls = Object.keys(all);
@@ -109,6 +119,7 @@ class create {
         }
 
         this.delete = function(key) {
+            this.setup();
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
             let jsonData = this.toJSON();
             if(!jsonData) return false;
