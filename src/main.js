@@ -5,11 +5,13 @@ const fse = require('fs-extra');
 const { set, get, unset } = require("lodash");
 const ErrorShow = require("./error.js");
 const multiple = require("./multiple.js");
+const cipher = require("./cipher.js");
 
 class create {
     constructor() {
         this.version = require("../package.json").version
         this.create = multiple;
+        this.cipher = cipher;
       
         var maxlimit;
         this.setup = function() {
