@@ -2,8 +2,6 @@
 node_modules
 .config
 .bash_history 
-.glitch-assets 
-.glitchdotcom.json 
 shrinkwrap.yaml
 .github
 datas.json
