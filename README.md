@@ -36,6 +36,20 @@ const csydb = require("csy.db");
 const db = new csydb.create("datas.json", 0); // ({PATH}, {MAXDATALIMIT})
 ```
 
+**Encrypted Data Protection**
+```js
+const csydb = require("csy.db");
+const db = new csydb.cipher("datas.json", 0, "SECRET_KEY"); // ({PATH}, {MAXDATALIMIT}, {SECRETKEY})
+
+// All Datas Encrypt
+
+db.encryptAll();
+
+// All Datas Decrypt
+
+db.decryptAll();
+```
+
 <br>
 
 For Support Join Server: https://discord.gg/gkmwaAZQBu
