@@ -1,7 +1,7 @@
 {
     "name": "csy.db",
-    "version": "1.4.5",
-    "description": "Readable Local Json Database Structure",
+    "version": "1.4.9",
+    "description": "csy.db Databases Advanced features #Every Time forever forward",
     "main": "index.js",
     "scripts": {
         "start": "node index.js",
@@ -16,7 +16,13 @@
         ".db",
         "db",
         "storing",
-        "easy"
+        "easy",
+        "cipher",
+        "password",
+        "data",
+        "encrypt data",
+        "mongodb shortcut",
+        "mongo short"
     ],
     "author": "bucksh0t",
     "license": "Apache-2.0",
@@ -25,10 +31,11 @@
     },
     "homepage": "https://github.com/CsYBot/csy.db",
     "dependencies": {
+        "cryptr": "^6.0.2",
         "fs": "^0.0.1-security",
         "fs-extra": "^10.0.1",
         "lodash": "^4.17.21",
-        "path": "^0.12.7",
-        "cryptr": "^6.0.2"
+        "mongoose": "^6.2.9",
+        "path": "^0.12.7"
     }
 }
