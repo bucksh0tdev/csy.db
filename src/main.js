@@ -6,27 +6,17 @@ const { set, get, unset } = require("lodash");
 const ErrorShow = require("./error.js");
 const multiple = require("./multiple.js");
 const cipher = require("./cipher.js");
+const mongodb = require("./mongodb.js");
 
 class create {
     constructor() {
-        this.version = require("../package.json").version
         this.create = multiple;
         this.cipher = cipher;
+        this.mongodb = mongodb;
       
-        var maxlimit;
+        var maxlimit = 0;
         this.setup = function() {
-            this.configpath = paths.join(process.cwd(), "csydb_config.json");
-
-            if(!fs.existsSync(this.configpath)) {
-                fse.outputFileSync(this.configpath, `{ "path": "datas.json", "limit": 0 }`)
-            }
-            this.config = JSON.parse(fs.readFileSync(this.configpath, "utf-8"));
-
-            if(!this.config || !this.config.path || isNaN(this.config.limit)) throw new ErrorShow("Config File Problem");
-
-            maxlimit = Number((isNaN(this.config.limit)) ? 0 : this.config.limit);
-
-            this.path = paths.join(process.cwd(), this.config.path);
+            this.path = paths.join(process.cwd(), "datas.json");
 
             if(!String(this.path).endsWith(".json")) throw new ErrorShow("End With .json Data Json File");
             if(!fs.existsSync(this.path)) {
@@ -59,13 +49,11 @@ class create {
             this.setup();
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
             if (value === "" || value === undefined || value === null || isNaN(Number(value))) throw new ErrorShow("Unapproved value");
-            let jsonData = this.toJSON();
-            let data = Number(get(jsonData, key));
-            if(value === "" || value === undefined || value === null) throw new ErrorShow("No key specified");
+            let data = Number(this.get(key)) || 0;
+            if(data == null) return false;
             if (isNaN(data)) throw new ErrorShow("Unapproved value");
             let res = (data + Number(value))
-            set(jsonData, key, res);
-            fs.writeFileSync(this.path, JSON.stringify(jsonData, null, 4));
+            this.set(key, res)
             return res;
         }
 
@@ -89,12 +77,8 @@ class create {
         this.has = function(key) {
             this.setup();
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
-            let all = this.toJSON();
-            if(!all) return false;
-            let control = all[key];
-            if(!control) return false;
-
-            return true;
+            let control = this.get(key);
+            return Boolean(control);
         }
 
         this.all = function(limit = 0) {
