@@ -1,4 +1,3 @@
-
 'use strict';
 const datas = require("./src/main");
 let indexing = new datas();
