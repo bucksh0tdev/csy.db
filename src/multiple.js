@@ -6,12 +6,10 @@ const { set, get, unset } = require("lodash");
 const ErrorShow = require("./error.js");
 
 class multipleCreate {
-    constructor(path, maxlimit = 0) {
+    constructor(path = "datas.json", maxlimit = 0) {
         if(!path || (isNaN(maxlimit))) throw new ErrorShow("Multiple Creating Settings Problem");
       
         this.path = paths.join(process.cwd(), path);
-
-        this.version = require("../package.json").version
 
         if(!String(this.path).endsWith(".json")) throw new ErrorShow("End With .json Data Json File");
         if(!fs.existsSync(this.path)) {
@@ -40,13 +38,11 @@ class multipleCreate {
         this.add = function(key, value) {
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
             if (value === "" || value === undefined || value === null || isNaN(Number(value))) throw new ErrorShow("Unapproved value");
-            let jsonData = this.toJSON();
-            let data = Number(get(jsonData, key));
-            if(value === "" || value === undefined || value === null) throw new ErrorShow("No key specified");
+            let data = Number(this.get(key)) || 0;
+            if(data == null) return false;
             if (isNaN(data)) throw new ErrorShow("Unapproved value");
             let res = (data + Number(value))
-            set(jsonData, key, res);
-            fs.writeFileSync(this.path, JSON.stringify(jsonData, null, 4));
+            this.set(key, res)
             return res;
         }
 
@@ -67,12 +63,9 @@ class multipleCreate {
 
         this.has = function(key) {
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
-            let all = this.toJSON();
-            if(!all) return false;
-            let control = all[key];
-            if(!control) return false;
 
-            return true;
+            let control = this.get(key);
+            return Boolean(control);
         }
 
         this.all = function(limit = 0) {
