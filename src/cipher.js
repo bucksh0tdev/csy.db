@@ -8,13 +8,11 @@ const encryptfun = require("./encrypt.js");
 const DEFAULT_SECRET_KEY = "zBK6;@2~ZbQwG^D~fmes}TWgP";
 
 class multipleCipher {
-    constructor(path, maxlimit = 0, SECRET_KEY = DEFAULT_SECRET_KEY) {
+    constructor(path = "datas.json", maxlimit = 0, SECRET_KEY = DEFAULT_SECRET_KEY) {
         if(!path || !SECRET_KEY || (isNaN(maxlimit))) throw new ErrorShow("Cipher Creating Settings Problem");
         const encrypt = new encryptfun(SECRET_KEY);
 
         this.path = paths.join(process.cwd(), path);
-
-        this.version = require("../package.json").version
 
         if(!String(this.path).endsWith(".json")) throw new ErrorShow("End With .json Data Json File");
         if(!fs.existsSync(this.path)) {
@@ -54,13 +52,11 @@ class multipleCipher {
         this.add = function(key, value) {
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
             if (value === "" || value === undefined || value === null || isNaN(Number(value))) throw new ErrorShow("Unapproved value");
-            let jsonData = this.toJSON();
-            if(!jsonData) return null;
-            let data = Number(get(jsonData, key) || 0);
-            if(value === "" || value === undefined || value === null) throw new ErrorShow("No key specified");
+
+            let data = Number(this.get(key) || 0);
+            if(data == null) return false;
             if (isNaN(data)) throw new ErrorShow("Unapproved value");
             let res = (data + Number(value))
-
             this.set(key, res)
             return Number(res);
         }
@@ -82,12 +78,8 @@ class multipleCipher {
 
         this.has = function(key) {
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
-            let jsonData = this.toJSON();
-            if(!jsonData) return false;
-            let control = get(jsonData, key);
-            if(!control) return false;
-
-            return true;
+            let control = this.get(key);
+            return Boolean(control);
         }
 
         this.all = function(limit = 0) {
