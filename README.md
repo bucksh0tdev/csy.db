@@ -50,6 +50,15 @@ db.encryptAll();
 db.decryptAll();
 ```
 
+**Mongodb Shortcut**
+```js
+const csydb = require("csy.db");
+const db = new csydb.mongodb("URL"); // ({MONGOURL})
+
+let data = await db.set("firstdata", 15);
+let getdata = await db.get("firstdata");
+```
+
 <br>
 
 For Support Join Server: https://discord.gg/gkmwaAZQBu
