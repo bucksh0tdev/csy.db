@@ -76,6 +76,7 @@ class multiplemongodb {
         }
 
         this.add = async function(key, value) {
+            await gpromises;
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
             if (value === "" || value === undefined || value === null || isNaN(Number(value))) throw new ErrorShow("Unapproved value");
             let datag = await this.get(key);
@@ -87,7 +88,28 @@ class multiplemongodb {
             return res;
         }
 
+        this.push = async function(key, value) {
+            await gpromises;
+            if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
+            if (value === "" || value === undefined || value === null) throw new ErrorShow("Unapproved value");
+            let data = this.get(key) || [];
+
+            var result;
+            if(data) {
+                if (!Array.isArray(data)) throw new ErrorShow('Target is not an array');
+                try {
+                    data.push(value);
+                    result = data;
+                } catch (err) {
+                    throw new ErrorShow("Pushing Problem");
+                }
+            }
+            await this.set(key, result);
+            return result;
+        }
+
         this.get = async function(key) {
+            await gpromises;
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
 
             const doc = await datasget.findOne({ dataname: { $eq: key } }).lean();
@@ -104,6 +126,7 @@ class multiplemongodb {
         }
 
         this.has = async function(key) {
+            await gpromises;
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
 
             let control = await this.get(key);
@@ -111,6 +134,7 @@ class multiplemongodb {
         }
 
         this.all = async function(limit = 0) {
+            await gpromises;
             if (typeof limit !== "number") throw new ErrorShow("Must be of limit number type");
             
             const arr = [];
@@ -126,6 +150,7 @@ class multiplemongodb {
         }
 
         this.delete = async function(key) {
+            await gpromises;
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
 
             await datasget.deleteOne({ dataname: { $eq: key } });
