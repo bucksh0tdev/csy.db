@@ -57,6 +57,26 @@ class create {
             return res;
         }
 
+        this.push = function(key, value) {
+            this.setup();
+            if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
+            if (value === "" || value === undefined || value === null) throw new ErrorShow("Unapproved value");
+            let data = this.get(key) || [];
+
+            var result;
+            if(data) {
+                if (!Array.isArray(data)) throw new ErrorShow('Target is not an array');
+                try {
+                    data.push(value);
+                    result = data;
+                } catch (err) {
+                    throw new ErrorShow("Pushing Problem");
+                }
+            }
+            this.set(key, result)
+            return result;
+        }
+
         this.get = function(key) {
             this.setup();
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
@@ -84,7 +104,12 @@ class create {
         this.all = function(limit = 0) {
             this.setup();
             if (typeof limit !== "number") throw new ErrorShow("Must be of limit number type");
-            const jsonData = JSON.parse(fs.readFileSync(this.path, "utf-8"));
+            let jsonData;
+            try {
+                jsonData = JSON.parse(fs.readFileSync(this.path, "utf-8"));
+            } catch (err) {
+                throw new ErrorShow("Json File Problem");
+            }
             const arr = [];
             for (const key in jsonData) {
                 arr.push({
