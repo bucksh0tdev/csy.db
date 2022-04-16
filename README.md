@@ -13,6 +13,7 @@ db.set("KEY", "DATA"); // Change Data And Result Data
 db.get("KEY"); // Result Data
 db.add("KEY"); // Change Data And Result Data
 db.fetch("KEY"); // Result Data
+db.push("KEY.KEY", "data"); // Push Datas Json or Array
 
 // Data All
 
@@ -24,10 +25,7 @@ db.has("KEY"); // True/False
 
 // Data Count
 
-db.size(); // All Data Size
-
-// How do i change the location of data?
-// Edit the (csydb.config.json) file that occurs after startup.
+db.size(); // All Data Length
 ```
 
 **Multiple Data**
