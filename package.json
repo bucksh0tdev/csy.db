@@ -1,6 +1,6 @@
 {
     "name": "csy.db",
-    "version": "1.4.9",
+    "version": "1.5.1",
     "description": "csy.db Databases Advanced features #Every Time forever forward",
     "main": "index.js",
     "scripts": {
