@@ -4,7 +4,7 @@ const fs = require("fs");
 const fse = require('fs-extra');
 const { set, get, unset } = require("lodash");
 const ErrorShow = require("./error.js");
-const encryptfun = require("./encrypt.js");
+const encryptfun = require("./functions/encrypt.js");
 const DEFAULT_SECRET_KEY = "zBK6;@2~ZbQwG^D~fmes}TWgP";
 
 class multipleCipher {
@@ -61,6 +61,25 @@ class multipleCipher {
             return Number(res);
         }
 
+        this.push = function(key, value) {
+            if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
+            if (value === "" || value === undefined || value === null) throw new ErrorShow("Unapproved value");
+            let data = this.get(key) || [];
+
+            var result;
+            if(data) {
+                if (!Array.isArray(data)) throw new ErrorShow('Target is not an array');
+                try {
+                    data.push(value);
+                    result = data;
+                } catch (err) {
+                    throw new ErrorShow("Pushing Problem");
+                }
+            }
+            this.set(key, result)
+            return result;
+        }
+
         this.get = function(key) {
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
             let jsonData = this.toJSON();
@@ -84,7 +103,12 @@ class multipleCipher {
 
         this.all = function(limit = 0) {
             if (typeof limit !== "number") throw new ErrorShow("Must be of limit number type");
-            const jsonData = JSON.parse(fs.readFileSync(this.path, "utf-8"));
+            let jsonData;
+            try {
+                jsonData = JSON.parse(fs.readFileSync(this.path, "utf-8"));
+            } catch (err) {
+                throw new ErrorShow("Json File Problem");
+            }
             const arr = [];
             for (const key in jsonData) {
                 arr.push({
