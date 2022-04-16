@@ -31,6 +31,9 @@ module.exports = {
     size: function() {
         return indexing.size();
     },
+    push: function(key, value) {
+        return indexing.push(key, value);
+    },
 
     create: function(path, maxlimit = 0) {
         const createuse = new indexing.create(path, maxlimit);
@@ -60,6 +63,9 @@ module.exports = {
         }
         this.size = function() {
             return createuse.size();
+        }
+        this.push = function(key, value) {
+            return createuse.push(key, value);
         }
     },
 
@@ -98,6 +104,9 @@ module.exports = {
         this.decryptAll = function() {
             return cipheruse.decryptAll();
         }
+        this.push = function(key, value) {
+            return cipheruse.push(key, value);
+        }
     },
 
     mongodb: function(url, logger, timeout) {
@@ -128,6 +137,9 @@ module.exports = {
         }
         this.size = async function() {
             return await mongodbuse.size();
+        }
+        this.push = async function(key, value) {
+            return await mongodbuse.push(key, value);
         }
     }
 
