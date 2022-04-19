@@ -7,9 +7,12 @@ const ErrorShow = require("./error.js");
 const multiple = require("./multiple.js");
 const cipher = require("./cipher.js");
 const mongodb = require("./mongodb.js");
+const EventEmitter = require('events');
+class Emitter extends EventEmitter {}
 
 class create {
     constructor() {
+        const mainEmitter = new Emitter();
         this.create = multiple;
         this.cipher = cipher;
         this.mongodb = mongodb;
@@ -40,6 +43,15 @@ class create {
             if (value === "" || value === undefined || value === null) throw new ErrorShow("Unapproved value");
             if(maxlimit != 0 && this.size() >= maxlimit) throw new ErrorShow("Data limit exceeded");
             let jsonData = this.toJSON();
+
+            let control = this.get(key);
+            if(control) {
+                if(control != value)
+                mainEmitter.emit("update", { last: `${control}`, new: `${value}`, key: `${key}` });
+            } else {
+                mainEmitter.emit("create", { key: `${key}`, value: `${value}` });
+            }
+
             set(jsonData, key, value);
             fs.writeFileSync(this.path, JSON.stringify(jsonData, null, 4));
             return value;
@@ -55,6 +67,11 @@ class create {
             let res = (data + Number(value))
             this.set(key, res)
             return res;
+        }
+
+        this.on = function(key, callback) {
+            if(!key || typeof callback != "function" || (key != "create" && key != "delete" && key != "update")) throw new ErrorShow("Event emitter key not found");
+            mainEmitter.on(key, callback);
         }
 
         this.push = function(key, value) {
@@ -73,7 +90,7 @@ class create {
                     throw new ErrorShow("Pushing Problem");
                 }
             }
-            this.set(key, result)
+            this.set(key, result);
             return result;
         }
 
@@ -134,6 +151,12 @@ class create {
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
             let jsonData = this.toJSON();
             if(!jsonData) return false;
+            
+            let control = this.get(key);
+            if(control) {
+                mainEmitter.emit("delete", { key: `${key}`, value: `${control}` });
+            }
+
             unset(jsonData, key)
             fs.writeFileSync(this.path, JSON.stringify(jsonData, null, 4))
             return;
