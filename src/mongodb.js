@@ -6,9 +6,13 @@ const DatasSchema = new mongoose.Schema({
     data: { type: String, required: true}
 });
 let datasget = mongoose.model('csydb', DatasSchema);
+const EventEmitter = require('events');
+class Emitter extends EventEmitter {}
 
 class multiplemongodb {
     constructor(connect, logger = false, timeout = 30000) {
+        const mongodbEmitter = new Emitter();
+        
         if(!connect) throw new ErrorShow("Mongodb Creating Settings Problem");
 
         let logined = false;
@@ -65,6 +69,14 @@ class multiplemongodb {
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
             if (value === "" || value === undefined || value === null) throw new ErrorShow("Unapproved value");
             
+            let control = await this.get(key);
+            if(control) {
+                if(control != value)
+                mongodbEmitter.emit("update", { last: `${control}`, new: `${value}`, key: `${key}` });
+            } else {
+                mongodbEmitter.emit("create", { key: `${key}`, value: `${value}` });
+            }
+
             let updating = await datasget.findOneAndUpdate({ dataname: { $eq: key } }, { data: value }).lean();
             if (!updating) {
               let creating = await datasget.create({
@@ -86,6 +98,11 @@ class multiplemongodb {
 
             await this.set(key, res);
             return res;
+        }
+
+        this.on = function(key, callback) {
+            if(!key || typeof callback != "function" || (key != "create" && key != "delete" && key != "update")) throw new ErrorShow("Event emitter key not found");
+            mongodbEmitter.on(key, callback);
         }
 
         this.push = async function(key, value) {
@@ -152,6 +169,11 @@ class multiplemongodb {
         this.delete = async function(key) {
             await gpromises;
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
+
+            let control = await this.get(key);
+            if(control) {
+                mongodbEmitter.emit("delete", { key: `${key}`, value: `${control}` });
+            }
 
             await datasget.deleteOne({ dataname: { $eq: key } });
             return;
