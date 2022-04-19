@@ -34,6 +34,9 @@ module.exports = {
     push: function(key, value) {
         return indexing.push(key, value);
     },
+    on: function(key, callback) {
+        return indexing.on(key, callback);
+    },
 
     create: function(path, maxlimit = 0) {
         const createuse = new indexing.create(path, maxlimit);
@@ -66,6 +69,9 @@ module.exports = {
         }
         this.push = function(key, value) {
             return createuse.push(key, value);
+        }
+        this.on = function(key, callback) {
+            return createuse.on(key, callback);
         }
     },
 
@@ -107,6 +113,9 @@ module.exports = {
         this.push = function(key, value) {
             return cipheruse.push(key, value);
         }
+        this.on = function(key, callback) {
+            return cipheruse.on(key, callback);
+        }
     },
 
     mongodb: function(url, logger, timeout) {
@@ -140,6 +149,9 @@ module.exports = {
         }
         this.push = async function(key, value) {
             return await mongodbuse.push(key, value);
+        }
+        this.on = function(key, callback) {
+            return mongodbuse.on(key, callback);
         }
     }
 
