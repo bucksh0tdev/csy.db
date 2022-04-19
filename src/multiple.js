@@ -4,9 +4,12 @@ const fs = require("fs");
 const fse = require('fs-extra');
 const { set, get, unset } = require("lodash");
 const ErrorShow = require("./error.js");
+const EventEmitter = require('events');
+class Emitter extends EventEmitter {}
 
 class multipleCreate {
     constructor(path = "datas.json", maxlimit = 0) {
+        const multipleEmitter = new Emitter();
         if(!path || (isNaN(maxlimit))) throw new ErrorShow("Multiple Creating Settings Problem");
       
         this.path = paths.join(process.cwd(), path);
@@ -30,6 +33,15 @@ class multipleCreate {
             if (value === "" || value === undefined || value === null) throw new ErrorShow("Unapproved value");
             if(maxlimit != 0 && this.size() >= maxlimit) throw new ErrorShow("Data limit exceeded");
             let jsonData = this.toJSON();
+
+            let control = this.get(key);
+            if(control) {
+                if(control != value)
+                multipleEmitter.emit("update", { last: `${control}`, new: `${value}`, key: `${key}` });
+            } else {
+                multipleEmitter.emit("create", { key: `${key}`, value: `${value}` });
+            }
+
             set(jsonData, key, value);
             fs.writeFileSync(this.path, JSON.stringify(jsonData, null, 4));
             return value;
@@ -44,6 +56,11 @@ class multipleCreate {
             let res = (data + Number(value))
             this.set(key, res)
             return res;
+        }
+
+        this.on = function(key, callback) {
+            if(!key || typeof callback != "function" || (key != "create" && key != "delete" && key != "update")) throw new ErrorShow("Event emitter key not found");
+            multipleEmitter.on(key, callback);
         }
 
         this.push = function(key, value) {
@@ -117,6 +134,12 @@ class multipleCreate {
             if (key === "" || typeof key !== "string") throw new ErrorShow("Unapproved key");
             let jsonData = this.toJSON();
             if(!jsonData) return false;
+
+            let control = this.get(key);
+            if(control) {
+                multipleEmitter.emit("delete", { key: `${key}`, value: `${control}` });
+            }
+
             unset(jsonData, key)
             fs.writeFileSync(this.path, JSON.stringify(jsonData, null, 4))
             return;
