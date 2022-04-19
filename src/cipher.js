@@ -6,9 +6,13 @@ const { set, get, unset } = require("lodash");
 const ErrorShow = require("./error.js");
 const encryptfun = require("./functions/encrypt.js");
 const DEFAULT_SECRET_KEY = "zBK6;@2~ZbQwG^D~fmes}TWgP";
+const EventEmitter = require('events');
+class Emitter extends EventEmitter {}
 
 class multipleCipher {
     constructor(path = "datas.json", maxlimit = 0, SECRET_KEY = DEFAULT_SECRET_KEY) {
+        const cipherEmitter = new Emitter();
+
         if(!path || !SECRET_KEY || (isNaN(maxlimit))) throw new ErrorShow("Cipher Creating Settings Problem");
         const encrypt = new encryptfun(SECRET_KEY);
 
@@ -38,10 +42,15 @@ class multipleCipher {
             
             let control = this.all().find(x => x.ID == key);
             if(control) {
+                if(control.data != value)
+                cipherEmitter.emit("update", { last: `${control.data}`, new: `${value}`, key: `${key}` });
+
                 set(realDatas, control.realID, encryptedvalue);
                 fs.writeFileSync(this.path, JSON.stringify(realDatas, null, 4));
                 return value;
             } else {
+                cipherEmitter.emit("create", { key: `${key}`, value: `${value}` });
+                
                 let encrypted = encrypt.encrypt(key);
                 set(realDatas, encrypted, encryptedvalue);
                 fs.writeFileSync(this.path, JSON.stringify(realDatas, null, 4));
@@ -59,6 +68,11 @@ class multipleCipher {
             let res = (data + Number(value))
             this.set(key, res)
             return Number(res);
+        }
+
+        this.on = function(key, callback) {
+            if(!key || typeof callback != "function" || (key != "create" && key != "delete" && key != "update")) throw new ErrorShow("Event emitter key not found");
+            cipherEmitter.on(key, callback);
         }
 
         this.push = function(key, value) {
@@ -157,6 +171,7 @@ class multipleCipher {
 
             let control = this.all().find(x => x.ID == key);
             if(control) {
+                cipherEmitter.emit("delete", { key: `${control.ID}`, value: `${control.data}` });
                 unset(realDatas, control.realID);
                 fs.writeFileSync(this.path, JSON.stringify(realDatas, null, 4));
                 return true;
