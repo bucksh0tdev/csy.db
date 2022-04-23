@@ -153,6 +153,43 @@ module.exports = {
         this.on = function(key, callback) {
             return mongodbuse.on(key, callback);
         }
+    },
+
+    server: function(url, password, logger, timeout) {
+        const serveruse = new indexing.server(url, password, logger, timeout);
+        this.set = async function(key, value) {
+            return await serveruse.set(key, value);
+        }
+        this.get = async function(key) {
+            return await serveruse.get(key);
+        }
+        this.delete = async function(key) {
+            return await serveruse.delete(key);
+        }
+        this.has = async function(key) {
+            return await serveruse.has(key);
+        }
+        this.toJSON = async function(limit) {
+            return await serveruse.toJSON(limit);
+        }
+        this.add = async function(key, value) {
+            return await serveruse.add(key, value);
+        }
+        this.fetch = async function(key) {
+            return await serveruse.fetch(key);
+        }
+        this.all = async function(limit = 0) {
+            return await serveruse.all(limit);
+        }
+        this.size = async function() {
+            return await serveruse.size();
+        }
+        this.push = async function(key, value) {
+            return await serveruse.push(key, value);
+        }
+        this.on = function(key, callback) {
+            return serveruse.on(key, callback);
+        }
     }
 
 };
