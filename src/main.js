@@ -7,6 +7,7 @@ const ErrorShow = require("./error.js");
 const multiple = require("./multiple.js");
 const cipher = require("./cipher.js");
 const mongodb = require("./mongodb.js");
+const server = require("./server.js");
 const EventEmitter = require('events');
 class Emitter extends EventEmitter {}
 
@@ -16,6 +17,7 @@ class create {
         this.create = multiple;
         this.cipher = cipher;
         this.mongodb = mongodb;
+        this.server = server;
       
         var maxlimit = 0;
         this.setup = function() {
