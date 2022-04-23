@@ -1,6 +1,6 @@
 {
     "name": "csy.db",
-    "version": "1.5.3",
+    "version": "1.5.6",
     "description": "csy.db Databases Advanced features #Every Time forever forward",
     "main": "index.js",
     "scripts": {
@@ -22,7 +22,9 @@
         "data",
         "encrypt data",
         "mongodb shortcut",
-        "mongo short"
+        "mongo short",
+        "csy.db-server",
+        "mongodb alternative"
     ],
     "author": "bucksh0t",
     "license": "Apache-2.0",
@@ -36,10 +38,7 @@
         "fs-extra": "^10.0.1",
         "lodash": "^4.17.21",
         "mongoose": "^6.2.9",
-        "path": "^0.12.7"
-    },
-    "engines": {
-        "node": ">=12.13.0",
-        "npm": ">=7.0.0"
+        "path": "^0.12.7",
+        "socket.io-client": "^4.4.1"
     }
 }
