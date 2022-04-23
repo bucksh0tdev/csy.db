@@ -41,6 +41,17 @@ db.on("delete", (datas) => {
 });
 ```
 
+**csy.db SERVER**
+```js
+const csydb = require("csy.db");
+const db = new csydb.server("URL", "password"); // ({SERVERURL}, {SERVERPASS})
+
+let data = await db.set("firstdata", 15);
+let getdata = await db.get("firstdata");
+
+// For More Help Join My Server
+```
+
 **Main Data**
 ```js
 const db = require("csy.db");
